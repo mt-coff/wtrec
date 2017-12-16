@@ -1,0 +1,14 @@
+{
+  "name": "wtrec",
+  "version": "1.0.0",
+  "description": "A cli for to record body weight in JSON",
+  "bin": {
+    "wtrec": "bin/wtrec.js"
+  },
+  "author": "mt_coff",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.12.2",
+    "dateformat": "^3.0.2"
+  }
+}
