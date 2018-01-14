@@ -23,7 +23,7 @@ function add(weight) {
     }
     const json = JSON.parse(data);
     const newData = {
-      date: `${dateFormat(now, 'isoDate')} ${dateFormat(now, 'hh:mm')}`,
+      date: `${dateFormat(now, 'isoDate')} ${dateFormat(now, 'HH:MM')}`,
       weight: weight
     }
 
