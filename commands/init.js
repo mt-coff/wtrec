@@ -19,8 +19,10 @@ function init() {
           throw err;
         }
 
-        console.log('generate weight.json');
+        console.log('Generate weight.json');
       });
     }
+
+    console.log('weight.json already exists.');
   });
 }
