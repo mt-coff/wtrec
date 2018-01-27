@@ -2,36 +2,49 @@
 
 'use strict';
 
-const program = require('commander')
+const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const dateFormat = require('dateformat')
 const init = require('./init.js')
 
-module.exports = add
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+
+module.exports = add;
 
 function add(weight) {
-  const home = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-  const filePath = path.join(home, 'weight.json');
-  const now = new Date();
+  return new Promise((resolve, reject) => {
+    const home = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+    const filePath = path.join(home, 'weight.json');
+    const now = new Date();
 
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      init();
-      add(weight);
-      return;
-    }
-    const json = JSON.parse(data);
-    const newData = {
-      date: `${dateFormat(now, 'isoDate')} ${dateFormat(now, 'HH:MM')}`,
-      weight: weight
-    }
+    readFile(filePath)
+      .then(data => {
+        const json = JSON.parse(data);
+        const newData = {
+          date: `${dateFormat(now, 'isoDate')} ${dateFormat(now, 'HH:MM')}`,
+          weight: weight
+        }
 
-    json.push(newData);
-
-    fs.writeFile(filePath, JSON.stringify(json, null , 2), err => {
-      if (err) throw err;
-      console.log(`Added weight: ${ newData.weight }`);
-    });
+        json.push(newData);
+        writeFile(filePath, JSON.stringify(json, null, 2))
+          .then(() => {
+            resolve(`Added weight: ${ newData.weight }.`);
+          })
+          .catch(err => {
+            reject(err);
+          })
+      })
+      .catch(err => {
+        init()
+          .then(msg => {
+            console.log(msg);
+            resolve(add(weight));
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
   });
 }
