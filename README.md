@@ -13,7 +13,5 @@ npm install -g
 wtrec init     # create weight.json
 wtrec add 100  # record 100 in JSON
 wtrec reset    # reset weight.json
+wtrec show     # show your weight record
 ```
-
-### Caution
-This project is my node.js practice. 🙏
