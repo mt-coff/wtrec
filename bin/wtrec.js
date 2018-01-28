@@ -4,6 +4,7 @@ const program = require('commander');
 const init = require('../commands/init.js');
 const add = require('../commands/add.js');
 const reset = require('../commands/reset.js');
+const show = require('../commands/show');
 
 program
   .version(require('../package').version, '-v --version')
@@ -40,12 +41,25 @@ program
   .description('add your weight in JSON')
   .action(weight => {
     add(weight)
-    .then(msg => {
-      console.log(msg)
-    })
-    .catch(err => {
-      console.log(err)
-    });
+      .then(msg => {
+        console.log(msg)
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  });
+
+program
+  .command('show')
+  .description('show your weight record')
+  .action(() => {
+    show()
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
   });
 
 program.parse(process.argv);
